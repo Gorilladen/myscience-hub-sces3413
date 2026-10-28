@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primary Science Curriculum Hub (SCES3413)</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-pitch-black: #020205;
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-blur: blur(24px);
+      
+      --text-main: #FFFFFF;
+      --text-muted: #A1A1AA;
+      
+      --accent-cyan: #06B6D4;
+      --accent-amber: #F59E0B;
+      --accent-emerald: #10B981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-pitch-black);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% -10%, rgba(99, 102, 241, 0.15), transparent 40%),
+        radial-gradient(circle at 80% 40%, rgba(16, 185, 129, 0.1), transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .app-container { max-width: 1380px; margin: 0 auto; padding: 24px 20px 80px; }
+
+    /* Top Portfolio Header */
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 24px; background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border); border-radius: 20px;
+      margin-bottom: 24px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+    .brand-tag { font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; gap: 10px; align-items: center; }
+    .brand-tag i { color: var(--accent-emerald); }
+    .author-badge { font-size: 12px; background: rgba(255,255,255,0.06); padding: 6px 14px; border-radius: 30px; border: 1px solid var(--glass-border); }
+    .author-badge span { color: var(--accent-cyan); font-weight: 700; }
+
+    /* Main Banner */
+    .hub-banner {
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+      border: 1px solid var(--glass-border); backdrop-filter: var(--glass-blur);
+      border-radius: 24px; padding: 32px; margin-bottom: 28px; position: relative; overflow: hidden;
+    }
+    .hub-banner h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; background: linear-gradient(180deg, #FFF 0%, #A1A1AA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hub-banner p { color: var(--text-muted); font-size: 14px; }
+
+    /* Year Navigation */
+    .year-nav-container {
+      display: flex; gap: 10px; background: var(--glass-bg); backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border); padding: 6px; border-radius: 18px; margin-bottom: 28px; overflow-x: auto;
+    }
+    .year-btn {
+      flex: 1; min-width: 100px; padding: 12px 16px; background: transparent; border: none;
+      border-radius: 12px; color: var(--text-muted); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.3s;
+    }
+    .year-btn:hover { background: rgba(255,255,255,0.04); color: white; }
+    .year-btn.active { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .year-btn.active i { color: var(--accent-cyan); }
+
+    /* 6 Sub-theme Cards */
+    .themes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .theme-card {
+      height: 130px; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; justify-content: flex-end;
+      position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s;
+    }
+    .theme-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .theme-inquiry { background: linear-gradient(135deg, #0284C7, #0F172A); }
+    .theme-life { background: linear-gradient(135deg, #059669, #064E3B); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 20px rgba(5, 150, 105, 0.4); } /* Active by default */
+    .theme-physical { background: linear-gradient(135deg, #4F46E5, #1E1B4B); }
+    .theme-material { background: linear-gradient(135deg, #D97706, #451A03); }
+    .theme-earth { background: linear-gradient(135deg, #7C3AED, #2E1065); }
+    .theme-tech { background: linear-gradient(135deg, #E11D48, #4C0519); }
+    
+    .theme-card svg { position: absolute; right: -10px; top: 10px; width: 80px; height: 80px; opacity: 0.2; pointer-events: none; }
+    .theme-card-title { font-size: 15px; font-weight: 700; color: white; z-index: 2; margin-bottom: 2px; }
+    .theme-card-sub { font-size: 11px; color: rgba(255,255,255,0.7); z-index: 2; }
+
+    /* Controls & Legend */
+    .controls-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 15px; }
+    
+    .legend-box {
+      background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 10px 16px; border-radius: 12px; font-size: 12px; color: #FDE68A; display: flex; align-items: center; gap: 10px;
+    }
+    
+    .highlight-btn {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: white;
+      border: none; padding: 10px 18px; border-radius: 12px; font-weight: 600; font-size: 13px;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); transition: 0.3s; display: flex; gap: 8px; align-items: center;
+    }
+    .highlight-btn:hover { box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5); transform: translateY(-2px); }
+    .highlight-btn.active-glow { background: white; color: #D97706; box-shadow: 0 0 25px rgba(255,255,255,0.6); }
+
+    /* Data Table - Liquid Glass */
+    .data-table-card {
+      background: var(--glass-bg); backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border); border-radius: 20px; padding: 24px; overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    th { padding: 14px; text-align: left; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); }
+    td { padding: 18px 14px; font-size: 13px; color: #E4E4E7; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; line-height: 1.6; }
+    
+    /* PL Badges (Dwi-Identiti Engine) */
+    .pl-container { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .pl-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; transition: all 0.4s ease; display: inline-block;}
+    
+    /* 1. PL Asal (Solid Capsule) */
+    .pl-original { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    
+    /* 2. PL Olahan/Scaffolded (Outline & Asterisk) */
+    .pl-scaffold { background: transparent; color: var(--accent-amber); border: 1px solid var(--accent-amber); box-shadow: 0 0 8px rgba(245, 158, 11, 0.2); }
+
+    /* Active Highlight Mode Styles */
+    .table-highlight-mode .pl-original { opacity: 0.2; filter: grayscale(100%); }
+    .table-highlight-mode .pl-scaffold { background: rgba(245, 158, 11, 0.15); box-shadow: 0 0 15px rgba(245, 158, 11, 0.8); transform: scale(1.05); border-color: #FBBF24; color: #FDE68A; }
+
+    /* Mental Action Box */
+    .mental-action-card {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(99, 102, 241, 0.05));
+      border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 12px; padding: 12px 16px; color: #7DD3FC; margin-top: 10px;
+    }
+    .mental-action-card strong { color: var(--accent-cyan); display: block; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <div class="top-bar">
+      <div class="brand-tag"><i class="fa-solid fa-atom"></i><span>Malaysian Primary Science DSKP Curriculum Hub</span></div>
+      <div class="author-badge"><i class="fa-solid fa-user-graduate"></i><span>Curriculum Analysis by <span>Muhammad Danial Amsyar</span></span></div>
+    </div>
+
+    <!-- Hub Banner -->
+    <div class="hub-banner">
+      <h1>Primary Science Curriculum Hub (SCES3413)</h1>
+      <p>Interactive Pedagogical Scaffolding & DSKP Mapping Analytics</p>
+    </div>
+
+    <!-- Year Navigation -->
+    <div class="year-nav-container">
+      <button class="year-btn"><i class="fa-solid fa-layer-group"></i> Year 1</button>
+      <button class="year-btn active"><i class="fa-solid fa-layer-group"></i> Year 2</button>
+      <button class="year-btn"><i class="fa-solid fa-layer-group"></i> Year 3</button>
+      <button class="year-btn"><i class="fa-solid fa-layer-group"></i> Year 4</button>
+      <button class="year-btn"><i class="fa-solid fa-layer-group"></i> Year 5</button>
+      <button class="year-btn"><i class="fa-solid fa-layer-group"></i> Year 6</button>
+    </div>
+
+    <!-- 6 Sub-theme Cards -->
+    <div class="themes-grid">
+      <div class="theme-card theme-inquiry"><div class="theme-card-title">Inquiry In Science</div><div class="theme-card-sub">Scientific Skills</div><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none"/></svg></div>
+      <div class="theme-card theme-life"><div class="theme-card-title">Life Science</div><div class="theme-card-sub">Humans, Animals, Plants</div><svg viewBox="0 0 100 100"><path d="M10 90 Q 50 10 90 90" stroke="white" stroke-width="2" fill="none"/></svg></div>
+      <div class="theme-card theme-physical"><div class="theme-card-title">Physical Science</div><div class="theme-card-sub">Light & Dark, Circuit</div><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" stroke="white" stroke-dasharray="4" stroke-width="2" fill="none"/></svg></div>
+      <div class="theme-card theme-material"><div class="theme-card-title">Material Science</div><div class="theme-card-sub">Mixtures</div><svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" stroke="white" stroke-width="2" fill="none"/></svg></div>
+      <div class="theme-card theme-earth"><div class="theme-card-title">Earth & Space</div><div class="theme-card-sub">Water & Air</div><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" stroke="white" stroke-width="1" fill="none"/></svg></div>
+      <div class="theme-card theme-tech"><div class="theme-card-title">Technology & Life</div><div class="theme-card-sub">Building Sets</div><svg viewBox="0 0 100 100"><polygon points="50,10 90,90 10,90" stroke="white" stroke-width="2" fill="none"/></svg></div>
+    </div>
+
+    <!-- Controls & Legend -->
+    <div class="controls-bar">
+      <div class="legend-box">
+        <i class="fa-solid fa-circle-info"></i>
+        <span><strong>Curriculum Note:</strong> PL badges marked with an asterisk (e.g., <strong>PL 1*</strong>) are custom pedagogical scaffolding designed by our team to support the original DSKP standards.</span>
+      </div>
+      
+      <!-- HIGHLIGHT BUTTON -->
+      <button id="scaffoldBtn" class="highlight-btn" onclick="toggleScaffolding()">
+        <i class="fa-solid fa-lightbulb"></i> Highlight Student Adaptations
+      </button>
+    </div>
+
+    <!-- Data Table Container -->
+    <div class="data-table-card" id="mainTableCard">
+      <table>
+        <thead>
+          <tr>
+            <th>Content Standard</th>
+            <th>Learning Standard</th>
+            <th>Performance Level (PL) & Details</th>
+            <th>Pedagogical Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1: Example with Scaffolded PLs -->
+          <tr>
+            <td><strong>3.1 Human Reproduction and Growth</strong></td>
+            <td><strong>3.1.1</strong> Describe humans reproduce by giving birth.</td>
+            <td>
+              <div class="pl-container">
+                <span class="pl-badge pl-scaffold">PL 1*</span>
+                <span class="pl-badge pl-scaffold">PL 2*</span>
+              </div>
+              <p style="margin-top: 8px;"><strong>PL 1*:</strong> State that humans reproduce.</p>
+              <p><strong>PL 2*:</strong> Identify that humans reproduce by giving birth.</p>
+            </td>
+            <td>
+              <div class="mental-action-card">
+                <strong>🧠 Mental Action (Attributing):</strong>
+                "How do you know humans reproduce by giving birth compared to laying eggs?"
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Row 2: Example with Original PLs -->
+          <tr>
+            <td><strong>3.1 Human Reproduction and Growth</strong></td>
+            <td><strong>3.1.2</strong> Describe changes in size, height, and weight since birth.</td>
+            <td>
+              <div class="pl-container">
+                <span class="pl-badge pl-original">PL 3</span>
+                <span class="pl-badge pl-original">PL 4</span>
+              </div>
+              <p style="margin-top: 8px;"><strong>PL 3:</strong> Describe changes in individuals since birth.</p>
+              <p><strong>PL 4:</strong> Generalize that inheritance features are passed down from parents.</p>
+            </td>
+            <td>
+              <div class="mental-action-card">
+                <strong>🧠 Mental Action (Comparing):</strong>
+                "What physical features of yours are similar to your parents?"
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    // Function to highlight scaffolding
+    function toggleScaffolding() {
+      const tableCard = document.getElementById('mainTableCard');
+      const btn = document.getElementById('scaffoldBtn');
+      
+      tableCard.classList.toggle('table-highlight-mode');
+      
+      if(tableCard.classList.contains('table-highlight-mode')) {
+        btn.classList.add('active-glow');
+        btn.innerHTML = '<i class="fa-solid fa-eye"></i> Viewing Adaptations';
+      } else {
+        btn.classList.remove('active-glow');
+        btn.innerHTML = '<i class="fa-solid fa-lightbulb"></i> Highlight Student Adaptations';
+      }
+    }
+  </script>
+</body>
+</html>
