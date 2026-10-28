@@ -260,4 +260,43 @@ const compactHeader=document.querySelector('.paneltop');const compactTools=docum
 const compactStyle=document.createElement('style');compactStyle.textContent=`
 .mapping-tools{display:none!important}.mapping-compact-tools .focus-controls[hidden],.mapping-compact-tools .mapping-actions[hidden]{display:none!important}.paneltop[hidden]{display:none!important}.paneltop{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:12px 24px;align-items:center;padding:20px 24px!important;margin-bottom:18px}.paneltop .legend{grid-column:1;grid-row:1;margin:0;line-height:1.6;color:#c4d1df}.paneltop #filter-status{grid-column:1;grid-row:2;font-size:12px;color:#9eb1c6}.mapping-compact-tools{grid-column:2;grid-row:1 / span 2;display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}.mapping-compact-tools .focus-controls{display:flex;gap:8px;width:auto}.mapping-compact-tools .mapping-actions{display:flex;margin:0;gap:8px}.mapping-compact-tools button,.mapping-compact-tools summary{min-height:42px}.source-panel{margin:0 0 18px}.workarea .contenthead{gap:12px}@media(max-width:950px){.paneltop{grid-template-columns:1fr}.paneltop .legend,.paneltop #filter-status,.mapping-compact-tools{grid-column:1;grid-row:auto}.mapping-compact-tools{justify-content:flex-start}.mapping-compact-tools .focus-controls{width:auto}}@media(max-width:600px){.paneltop{padding:16px!important;gap:12px}.mapping-compact-tools{width:100%}.mapping-compact-tools .focus-controls{display:grid;width:100%;grid-template-columns:1fr 1fr}.mapping-compact-tools .mapping-actions{width:100%}.mapping-compact-tools .action-menu{position:relative}}
 `;document.head.appendChild(compactStyle);
+
+// Reading view follows the same Learning Area boundaries as the tables.
+const readingAreaStyle=document.createElement('style');readingAreaStyle.textContent=`
+.area-block .reading-area-document{padding:20px 24px 26px;max-width:1100px;margin:auto}
+.reading-area-session{margin:0 0 20px;border:1px solid #ffffff20;border-radius:15px;background:linear-gradient(140deg,#ffffff08,#ffffff03);overflow:hidden}
+.reading-area-session-header{padding:14px 18px;border-bottom:1px solid #ffffff18;background:linear-gradient(100deg,rgba(var(--theme-rgb),.12),transparent)}
+.reading-area-session-header .session-mark{margin:0}
+.reading-area-entry{padding:5px 18px 17px;border-bottom:1px solid #ffffff14}
+.reading-area-entry:last-child{border-bottom:0}
+.reading-area-entry .reading-body{border:0;margin:0;padding:0;max-width:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:0 26px}
+.reading-area-entry .reading-body section{min-width:0;overflow-wrap:anywhere;color:#e1e8f2;font-size:15px;line-height:1.7}
+.reading-area-entry .reading-body h4{margin:16px 0 6px}
+.reading-area-entry .session-cell{border-left:3px solid var(--session)!important;margin-top:12px;padding:0 0 0 12px!important}
+.reading-area-entry .session-cell h4{margin-top:4px}
+@media(max-width:700px){.area-block .reading-area-document{padding:12px}.reading-area-entry{padding:4px 14px 14px}.reading-area-entry .reading-body{display:block}.reading-area-session-header{padding:12px 14px}}
+`;document.head.appendChild(readingAreaStyle);
+const readingAreaPreviousRender=render;
+render=function(){
+ readingAreaPreviousRender();
+ if(state.view!=='card')return;
+ document.querySelectorAll('#results .area-block').forEach(block=>{
+  const list=block.querySelector('.reading-list');if(!list)return;
+  const items=[...list.querySelectorAll(':scope > .reading-item')];if(!items.length)return;
+  const doc=document.createElement('div');doc.className='reading-area-document';
+  let group=null;
+  items.forEach(item=>{
+   const badge=item.querySelector('.session-mark');
+   if(!group||badge){group=document.createElement('section');group.className='reading-area-session';if(badge){const head=document.createElement('div');head.className='reading-area-session-header';head.append(badge);group.append(head)}doc.append(group)}
+   const body=item.querySelector('.reading-body');if(!body)return;
+   body.querySelectorAll('section').forEach(section=>{const heading=section.querySelector('h4');if(heading&&!section.textContent.slice(heading.textContent.length).trim())section.remove()});
+   const entry=document.createElement('div');entry.className='reading-area-entry';entry.append(body);group.append(entry);
+  });
+  list.replaceWith(doc);
+ });
+};
+$('#search').addEventListener('input',()=>{if(state.year===1)render()});
+$('#filter').addEventListener('change',()=>{if(state.year===1)render()});
+render();
+
 </script></body></html>
